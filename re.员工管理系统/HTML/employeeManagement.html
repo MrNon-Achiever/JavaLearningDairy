@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>re.员工管理系统</title>
+    <link rel="stylesheet" href="../CSS/employeeManagement.css">
+</head>
+<body>
+    <div id="container">
+        <div id="nav">
+            <span>Tlias智慧教育辅助系统</span>
+            <a href="">退出登录</a>
+        </div>
+        <div id="form">
+            <form>
+            <label for="">
+                姓名：<input type="text" placeholder="请输入姓名" v-model="searchForm.name">
+            </label>
+            <label for="">
+                性别：<select name="" id="" v-model="searchForm.gender">
+                    <option value=""></option>
+                    <option value="1">男</option>
+                    <option value="2">女</option>
+                </select>
+            </label>
+            <label for="">
+                职位：<select name="" id="" v-model="searchForm.job">
+                    <option value=""></option>
+                    <option value="1">班主任</option>
+                    <option value="2">讲师</option>
+                    <option value="3">学生</option>
+                    <option value="4">年级主任</option>
+                    <option value="5">教导主任</option>
+                    <option value="6">校长</option>
+                </select>
+            </label>
+            <label>
+                <button id="research" type="button" @click="search">查询</button>
+                <button id="delete" type="button" @click="clear">删除</button>
+            </label>
+            </form>
+        </div>
+        <div id="tb">
+            <table>
+                    <tr id="tHead">
+                        <td>序号</td>
+                        <td>姓名</td>
+                        <td>性别</td>
+                        <td>头像</td>
+                        <td>职位</td>
+                        <td>入职时间</td>
+                        <td>操作时间</td>
+                        <td>操作</td>
+                    </tr>
+                    <tr v-for="(e, index) in empList" :key="e.id" class="tBody">
+                        <td>{{index+1}}</td>
+                        <td>{{e.name}}</td>
+                        <td>
+                            <span v-if="e.gender==1">男</span>
+                            <span v-else>女</span>
+                        </td>
+                        <td>
+                            <img :src="e.image" alt="照片无法显示">
+                        </td>
+                        <td>
+                            <span v-if="e.job==1">班主任</span>
+                            <span v-if="e.job==2">讲师</span>
+                            <span v-if="e.job==3">学生</span>
+                            <span v-if="e.job==4">年级主任</span>
+                            <span v-if="e.job==5">教导主任</span>
+                            <span v-if="e.job==6">校长</span>
+                        </td>
+                        <td>{{e.entrydate}}</td>
+                        <td>{{e.updatetime}}</td>
+                        <td>
+                            <button>编辑</button>
+                            <button>删除</button>
+                        </td>
+                    </tr>
+                
+            </table>
+        </div>
+        <div id="footer">
+            <p>江苏传媒智播客教育科技股份有限公司</p>
+            <p>版权所有Copyright 2024 All Right Reserved</p>
+        </div>
+    </div>
+    <script src="../JS/employeeManagement.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module">
+        import{createApp}from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+        createApp({
+            data(){
+                return{
+                    searchForm:{
+                        name:"",
+                        gender:"",
+                        job:""
+                    },
+                    empList:[]
+                }
+            },
+            methods:{
+                async search(){
+                    let result=await axios.get(`http://web-server.itheima.net/emps/list?name=${this.searchForm.name}&gender=${this.searchForm.gender}&job=${this.searchForm.job}`);
+                    this.empList=result.data.data;
+                },
+                clear(){
+                    this.searchForm={name:"",gender:"",job:""};
+                    this.search();
+                }
+            },
+            mounted(){
+                this.search();
+            }
+          
+        }).mount('#container')
+    </script>
+</body>
+</html>
