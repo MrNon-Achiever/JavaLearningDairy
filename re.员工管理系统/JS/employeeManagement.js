@@ -9,5 +9,5 @@ document.addEventListener("DOMContentLoaded",function(){
             trs[i].style.backgroundColor='#fff';
         })
     }   
-    },100);
+    },200);
 })
