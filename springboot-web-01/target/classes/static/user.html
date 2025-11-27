@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户数据表格</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        caption {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <caption>用户信息表</caption>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>用户名</th>
+        <th>密码</th>
+        <th>姓名</th>
+        <th>年龄</th>
+        <th>更新时间</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="(u, index) in userList" :key="u.id">
+        <td>{{u.id}}</td>
+        <td>{{u.username}}</td>
+        <td>{{u.password}}</td>
+        <td>{{u.name}}</td>
+        <td>{{u.age}}</td>
+        <td>{{u.updateTime}}</td>
+    </tr>
+    
+  
+    </tbody>
+</table>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="module">
+    import {createApp} from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+    createApp({
+        data(){
+            return{
+                userList:[]
+            }
+        },
+        methods:{
+            async search(){
+                let result=await axios.get("/list");
+                this.userList=result.data;
+            }
+        },
+        mounted(){
+            this.search();
+        }
+    }).mount("table")
+</script>
+</body>
+</html>
