@@ -1,0 +1,32 @@
+a{
+/* 去除超链接下面的下划线 */
+text-decoration: none;
+font-size:18px;
+color:cadetblue;
+}
+/*1.描述法 2.rgb 3.rgba 4.十六进制*/
+.time{
+    color:#b2b2b2;
+    font-size:18px;
+}
+p{
+    text-indent:2em;
+    line-height:1.8em;
+    font-size:24px;
+}
+h1{
+    text-align:left;
+}
+img{
+    display:block;
+    width:100%;
+}
+video{
+    display:block;
+    width:100%;
+}
+
+.container{
+    width:80%;
+    margin:auto;
+}
