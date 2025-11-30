@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>员工管理系统自制</title>
+    <link rel="stylesheet" href="../css/员工管理页面自制.css">
+</head>
+<body>
+    <div id="container">
+        <div id="nav">
+            <span>Tlias智能学习辅助系统</span>
+            <a href="">退出登录</a>
+        </div>
+        <div id="form">
+            <form @submit.prevent>
+                <label for="">姓名：<input type="text" name="name" placeholder="请输入姓名" v-model="searchForm.name"></label>
+                <label for="">性别：
+                    <select name="gender" v-model="searchForm.gender" >
+                        <option value=""></option>
+                        <option value="1">男</option>
+                        <option value="2">女</option>
+                    </select>
+                </label>
+                <label for="">职位：<select name="positon" v-model="searchForm.job">
+                    <option value="" ></option>
+                    <option value="1">班主任</option>
+                    <option value="2">讲师</option>
+                    <option value="3">学生</option>
+                </select></label>
+              <label for="">  
+                <button id="search" v-on:click="search">查询</button>
+                <button id="reset" @click="clear">重置</button>
+                </label>
+            </form>
+
+        </div>
+        <div id="table">
+            <table>
+                <tr>
+                    <th>序号</th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>头像</th>
+                    <th>职位</th>
+                    <th>入职时间</th>
+                    <th>操作时间</th>
+                    <th>操作</th>
+                </tr>
+                <tr v-for="(e, index) in empList" :key="e.id">
+                    <td>{{index+1}}</td>
+                    <td>{{e.name}}</td>
+                    <td>
+                        <span v-if="e.gender==1">男</span>
+                        <span v-else>女</span>
+                    </td>
+                    <td><img :src="e.image" alt="照片无法显示"></td>
+                    <td>
+                        <span v-if="e.job==1">班主任</span>
+                        <span v-else-if="e.job==2">讲师</span>
+                        <span v-else-if="e.job==3">学生</span>
+                        <span v-else-if="e.job==4">教导主任</span>
+                        <span v-else-if="e.job==5">教学组长</span>
+                        <span v-else>校长</span>
+                    </td>
+                    <td>{{e.entrydate}}</td>
+                    <td>{{e.updatetime}}</td>
+                    <td>
+                        <button>编辑</button>
+                        <button>删除</button>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+        <div id="footer">
+            <p>江苏传媒智播客教育科技股份有限公司</p>
+            <p>版权所有Copyright 2024 All Rigth Reserved</p>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../JS/员工管理页面.js" ></script>
+    <script type="module">
+        import{createApp}from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+        createApp({
+            data() {
+                return {
+                    searchForm:{
+                    name:"",
+                    gender:"",
+                    job:""
+                    },
+                    empList:[]
+                }
+            },
+            methods:{
+                async search(){
+                    let result=await axios.get(`http://web-server.itheima.net/emps/list?name=${this.searchForm.name}&gender=${this.searchForm.gender}&job=${this.searchForm.job}`)
+                    this.empList=result.data.data;
+                },
+                clear(){
+                    this.searchForm={name:"",gender:"",job:""};
+                    this.search();
+                }
+            },
+            mounted(){
+                this.search();
+            }
+        }).mount('#container');
+    </script>
+
+</body>
+</html>

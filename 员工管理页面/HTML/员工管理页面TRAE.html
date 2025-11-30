@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>员工管理系统TRAE</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- 配置Tailwind自定义颜色 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navbar: '#f0f2f5',
+            primary: '#409eff',
+            success: '#67c23a',
+            danger: '#f56c6c',
+            warning: '#e6a23c',
+            info: '#909399',
+          },
+        },
+      }
+    }
+  </script>
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .table-shadow {
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+      }
+      .avatar-hover {
+        transition: transform 0.3s ease;
+      }
+      .avatar-hover:hover {
+        transform: scale(1.05);
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- 导航栏 -->
+  <header class="bg-navbar shadow-md py-4">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-gray-800">tlias智能学习辅助系统</h1>
+      <a href="#" class="text-primary hover:text-primary/80 transition-colors duration-300 text-lg">
+        <i class="fa fa-sign-out mr-1"></i>退出登录
+      </a>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-6">
+    <!-- 搜索表单区域 -->
+    <section class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <form id="searchForm" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="flex flex-col">
+          <label for="name" class="text-gray-700 mb-2 font-medium">姓名</label>
+          <input type="text" id="name" name="name" 
+                 class="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300">
+        </div>
+        
+        <div class="flex flex-col">
+          <label for="gender" class="text-gray-700 mb-2 font-medium">性别</label>
+          <select id="gender" name="gender" 
+                  class="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 appearance-none bg-white">
+            <option value="">全部</option>
+            <option value="男">男</option>
+            <option value="女">女</option>
+          </select>
+        </div>
+        
+        <div class="flex flex-col">
+          <label for="position" class="text-gray-700 mb-2 font-medium">职位</label>
+          <select id="position" name="position" 
+                  class="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 appearance-none bg-white">
+            <option value="">全部</option>
+            <option value="班主任">班主任</option>
+            <option value="讲师">讲师</option>
+            <option value="学生">学生</option>
+          </select>
+        </div>
+        
+        <div class="flex items-end space-x-2">
+          <button type="submit" class="flex-1 bg-primary hover:bg-primary/90 text-white py-2 px-4 rounded-md transition-colors duration-300 shadow-md hover:shadow-lg">
+            <i class="fa fa-search mr-1"></i>查询
+          </button>
+          <button type="button" id="resetBtn" class="flex-1 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 py-2 px-4 rounded-md transition-colors duration-300">
+            <i class="fa fa-refresh mr-1"></i>清空
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 表格展示区 -->
+    <section class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+      <div class="overflow-x-auto">
+        <table class="w-full table-shadow">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="py-3 px-4 text-left text-gray-700 font-medium">姓名</th>
+              <th class="py-3 px-4 text-left text-gray-700 font-medium">性别</th>
+              <th class="py-3 px-4 text-left text-gray-700 font-medium">头像</th>
+              <th class="py-3 px-4 text-left text-gray-700 font-medium">职位</th>
+              <th class="py-3 px-4 text-left text-gray-700 font-medium">入职日期</th>
+              <th class="py-3 px-4 text-left text-gray-700 font-medium">最后操作时间</th>
+              <th class="py-3 px-4 text-center text-gray-700 font-medium">操作</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <!-- 三体人物测试数据1 -->
+            <tr class="hover:bg-gray-50 transition-colors duration-200">
+              <td class="py-4 px-4 text-gray-800">叶文洁</td>
+              <td class="py-4 px-4 text-gray-800">女</td>
+              <td class="py-4 px-4">
+                <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center avatar-hover overflow-hidden">
+                  <img src="https://picsum.photos/id/64/40/40" alt="叶文洁" class="w-full h-full object-cover">
+                </div>
+              </td>
+              <td class="py-4 px-4 text-gray-800">讲师</td>
+              <td class="py-4 px-4 text-gray-800">2023-01-15</td>
+              <td class="py-4 px-4 text-gray-800">2024-05-18 14:30:25</td>
+              <td class="py-4 px-4 text-center">
+                <button class="text-primary hover:text-primary/80 transition-colors duration-300 mr-3">
+                  <i class="fa fa-pencil mr-1"></i>编辑
+                </button>
+                <button class="text-danger hover:text-danger/80 transition-colors duration-300">
+                  <i class="fa fa-trash mr-1"></i>删除
+                </button>
+              </td>
+            </tr>
+            <!-- 三体人物测试数据2 -->
+            <tr class="hover:bg-gray-50 transition-colors duration-200">
+              <td class="py-4 px-4 text-gray-800">罗辑</td>
+              <td class="py-4 px-4 text-gray-800">男</td>
+              <td class="py-4 px-4">
+                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center avatar-hover overflow-hidden">
+                  <img src="https://picsum.photos/id/91/40/40" alt="罗辑" class="w-full h-full object-cover">
+                </div>
+              </td>
+              <td class="py-4 px-4 text-gray-800">学生</td>
+              <td class="py-4 px-4 text-gray-800">2023-03-22</td>
+              <td class="py-4 px-4 text-gray-800">2024-05-19 09:15:42</td>
+              <td class="py-4 px-4 text-center">
+                <button class="text-primary hover:text-primary/80 transition-colors duration-300 mr-3">
+                  <i class="fa fa-pencil mr-1"></i>编辑
+                </button>
+                <button class="text-danger hover:text-danger/80 transition-colors duration-300">
+                  <i class="fa fa-trash mr-1"></i>删除
+                </button>
+              </td>
+            </tr>
+            <!-- 三体人物测试数据3 -->
+            <tr class="hover:bg-gray-50 transition-colors duration-200">
+              <td class="py-4 px-4 text-gray-800">程心</td>
+              <td class="py-4 px-4 text-gray-800">女</td>
+              <td class="py-4 px-4">
+                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center avatar-hover overflow-hidden">
+                  <img src="https://picsum.photos/id/26/40/40" alt="程心" class="w-full h-full object-cover">
+                </div>
+              </td>
+              <td class="py-4 px-4 text-gray-800">班主任</td>
+              <td class="py-4 px-4 text-gray-800">2023-06-10</td>
+              <td class="py-4 px-4 text-gray-800">2024-05-20 16:45:10</td>
+              <td class="py-4 px-4 text-center">
+                <button class="text-primary hover:text-primary/80 transition-colors duration-300 mr-3">
+                  <i class="fa fa-pencil mr-1"></i>编辑
+                </button>
+                <button class="text-danger hover:text-danger/80 transition-colors duration-300">
+                  <i class="fa fa-trash mr-1"></i>删除
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- 底部版权区域 -->
+  <footer class="bg-navbar py-6">
+    <div class="container mx-auto px-4 text-center text-gray-600">
+      <p class="mb-2">江苏传媒智播客教育科技股份有限公司</p>
+      <p>版权所有Copyright 2024 All Rigth Reserved</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // 清空按钮事件
+    document.getElementById('resetBtn').addEventListener('click', function() {
+      document.getElementById('searchForm').reset();
+    });
+    
+    // 搜索表单提交事件
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // 这里可以添加搜索逻辑
+      alert('搜索功能已触发！');
+    });
+    
+    // 为编辑按钮添加点击事件
+    document.querySelectorAll('button').forEach(button => {
+      if (button.innerHTML.includes('编辑')) {
+        button.addEventListener('click', function() {
+          const name = this.closest('tr').querySelector('td:first-child').textContent;
+          alert(`编辑员工：${name}`);
+        });
+      }
+    });
+    
+    // 为删除按钮添加点击事件
+    document.querySelectorAll('button').forEach(button => {
+      if (button.innerHTML.includes('删除')) {
+        button.addEventListener('click', function() {
+          const name = this.closest('tr').querySelector('td:first-child').textContent;
+          if(confirm(`确定要删除员工：${name}吗？`)) {
+            alert(`已删除员工：${name}`);
+            // 这里可以添加实际的删除逻辑
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
